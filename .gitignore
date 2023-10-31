@@ -1,0 +1,11 @@
+# Dependency directories
+node_modules/
+
+# Environment variable file
+.env
+
+# Secrets
+.npmrc
+
+# Operating-system files
+.DS_Store
