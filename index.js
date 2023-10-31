@@ -81,7 +81,7 @@ const serve = (protocolModule, options) => {
   const server = protocolModule.createServer(options, requestHandler);
   const port = process.env.PORT || '3009';
   server.listen(port, () => {
-    console.log(`Scores server listening at ${protocol}://localhost:${port}.`);
+    console.log(`Scores server listening at http://localhost:${port}.`);
   });
 };
 serve(http, {});
