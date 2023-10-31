@@ -1,0 +1,26 @@
+{
+  "name": "scores",
+  "version": "1.0.0",
+  "description": "Extract scores from reports and produce a comparative report",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/poolcvs/scores"
+  },
+  "keywords": ["accessibility", "a11y", "testing", "scoring"],
+  "author": "Jonathan Robert Pool <jonathan.pool@cvshealth.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/poolcvs/scores/issues"
+  },
+  "homepage": "https://github.com/poolcvs/scores",
+  "dependencies": {
+    "testilo": "*"
+  },
+  "devDependencies": {
+    "eslint": "*"
+  }
+}
