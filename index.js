@@ -40,7 +40,7 @@ const requestHandler = async (request, response) => {
   // Otherwise, if the request is a GET request:
   else if (method === 'GET') {
     // If it is for the stylesheet:
-    if (requestURL === '/scores/style.css') {
+    if (requestURL.endsWith('style.css')) {
       // Serve it.
       const styleSheet = await fs.readFile('style.css', 'utf8');
       response.end(styleSheet);
@@ -59,10 +59,12 @@ const requestHandler = async (request, response) => {
       // Get the reports.
       const allReportNames = await fs.readdir('../testu/reports');
       const jsonReportNames = allReportNames.filter(reportName => reportName.endsWith('.json'));
-      const reports = jsonReportNames.map(async reportName => {
+      const reports = [];
+      for (const reportName of jsonReportNames) {
         const reportJSON = await fs.readFile(`../testu/reports/${reportName}`, 'utf8');
-        return JSON.parse(reportJSON);
-      });
+        const report = JSON.parse(reportJSON);
+        reports.push(report);
+      };
       // Get a comparison of them.
       const comparison = await comparer(reports);
       // Serve it.
