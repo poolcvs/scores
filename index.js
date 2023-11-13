@@ -13,18 +13,22 @@ const fs = require('fs/promises');
 const http = require('http');
 // Function to compare scores.
 const {comparer} = require(`testilo/procs/compare/${process.env.COMPARER}/index`);
+// Module to produce credit reports.
+const {credit} = require(`testilo/procs/credit`);
 
 // ########## FUNCTIONS
 
-// Creates and serves a result.
-const compare = async (scoredReports, response) => {
-  try {
-    const comparison = await comparer(scoredReports);
-    response.end(comparison);
-  }
-  catch(error) {
-    await serveError(error, response);
-  }
+// Gets the scored reports.
+const getReports = async () => {
+  const allReportNames = await fs.readdir('../testu/reports');
+  const jsonReportNames = allReportNames.filter(reportName => reportName.endsWith('.json'));
+  const reports = [];
+  for (const reportName of jsonReportNames) {
+    const reportJSON = await fs.readFile(`../testu/reports/${reportName}`, 'utf8');
+    const report = JSON.parse(reportJSON);
+    reports.push(report);
+  };
+  return reports;
 };
 // Handles a request.
 const requestHandler = async (request, response) => {
@@ -55,21 +59,25 @@ const requestHandler = async (request, response) => {
       response.end('');
     }
     // Otherwise, if it is for the score comparison:
-    else if (['/scores', '/scores/index.html'].includes(requestURL)) {
+    else if (requestURL === '/scores') {
       // Get the reports.
-      const allReportNames = await fs.readdir('../testu/reports');
-      const jsonReportNames = allReportNames.filter(reportName => reportName.endsWith('.json'));
-      const reports = [];
-      for (const reportName of jsonReportNames) {
-        const reportJSON = await fs.readFile(`../testu/reports/${reportName}`, 'utf8');
-        const report = JSON.parse(reportJSON);
-        reports.push(report);
-      };
+      const reports = await getReports();
       // Get a comparison of them.
       const comparison = await comparer(reports);
       // Serve it.
       response.setHeader('Content-Location', '/scores/result');
       response.end(comparison);
+    }
+    // Otherwise, if it is for the credit report:
+    else if (requestURL === '/scores/credit') {
+      // Get the reports.
+      const reports = await getReports();
+      // Get a credit report on them.
+      const creditReport = await credit(reports);
+      // Serve it.
+      response.setHeader('Content-Location', '/scores/credit/result');
+      response.setHeader('Content-Type', 'application/json');
+      response.end(creditReport);
     }
   }
   // Otherwise, i.e. if it uses another method:
