@@ -1,6 +1,6 @@
 {
   "name": "scores",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Extract scores from reports and produce a comparative report",
   "main": "index.js",
   "scripts": {

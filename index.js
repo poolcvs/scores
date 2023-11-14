@@ -14,7 +14,7 @@ const http = require('http');
 // Function to compare scores.
 const {comparer} = require(`testilo/procs/compare/${process.env.COMPARER}/index`);
 // Module to produce credit reports.
-const {credit} = require(`testilo/procs/credit`);
+const {credit} = require(`testilo/procs/analyze/credit`);
 
 // ########## FUNCTIONS
 
