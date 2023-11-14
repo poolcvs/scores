@@ -74,10 +74,11 @@ const requestHandler = async (request, response) => {
       const reports = await getReports();
       // Get a credit report on them.
       const creditReport = await credit(reports);
+      const creditReportJSON = JSON.stringify(creditReport, null, 2);
       // Serve it.
       response.setHeader('Content-Location', '/scores/credit/result');
       response.setHeader('Content-Type', 'application/json');
-      response.end(creditReport);
+      response.end(creditReportJSON);
     }
   }
   // Otherwise, i.e. if it uses another method:
