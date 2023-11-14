@@ -1,2 +1,2 @@
 # scores
-Extracts scores from reports and produces a comparative report
+Produces reports on scored Testaro reports.
