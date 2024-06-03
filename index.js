@@ -14,7 +14,9 @@ const http = require('http');
 // Function to compare scores.
 const {comparer} = require(`testilo/procs/compare/${process.env.COMPARER}/index`);
 // Module to produce credit reports.
-const {credit} = require(`testilo/credit`);
+const {credit} = require('testilo/credit');
+// Module to summarize reports.
+const {summarize} = require('testilo/summarize');
 
 // ########## FUNCTIONS
 
@@ -62,8 +64,15 @@ const requestHandler = async (request, response) => {
     else if (requestURL === '/scores') {
       // Get the reports.
       const reports = await getReports();
+      // Summarize them.
+      const summaries = reports.map(report => summarize(report));
+      const summaryReport = {
+        id: 'demo',
+        what: 'Demonstration of Testaro and Testilo',
+        summaries
+      };
       // Get a comparison of them.
-      const comparison = await comparer(reports);
+      const comparison = await comparer('demo', 'Testaro/Testilo demo', summaryReport);
       // Serve it.
       response.setHeader('Content-Location', '/scores/result');
       response.end(comparison);
